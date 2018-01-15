@@ -113,6 +113,7 @@ def create_model():
 
 * Loss Functions: Mean Squared Error
 * Optimizer: AdamOptimizer to manage the optimization of learning rate
+* Number of Epochs: 10
 
 ## Training/Validation Sample Generation
 
