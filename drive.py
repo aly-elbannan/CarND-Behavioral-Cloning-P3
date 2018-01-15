@@ -43,11 +43,6 @@ class SimplePIController:
         return self.Kp * self.error + self.Ki * self.integral
 
 
-controller = SimplePIController(0.1, 0.002)
-set_speed = 9
-controller.set_desired(set_speed)
-
-
 @sio.on('telemetry')
 def telemetry(sid, data):
     if data:
@@ -108,6 +103,13 @@ if __name__ == '__main__':
         default='',
         help='Path to image folder. This is where the images from the run will be saved.'
     )
+    parser.add_argument(
+        'set_speed',
+        type=float,
+        nargs='?',
+        default=9.0,
+        help='Path to image folder. This is where the images from the run will be saved.'
+    )
     args = parser.parse_args()
 
     # check that model Keras version is same as local Keras version
@@ -134,6 +136,10 @@ if __name__ == '__main__':
 
     # wrap Flask application with engineio's middleware
     app = socketio.Middleware(sio, app)
+
+    controller = SimplePIController(0.1, 0.002)
+    set_speed = args.set_speed
+    controller.set_desired(set_speed)
 
     # deploy as an eventlet WSGI server
     eventlet.wsgi.server(eventlet.listen(('', 4567)), app)
